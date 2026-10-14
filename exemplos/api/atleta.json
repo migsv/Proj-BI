@@ -1,0 +1,22 @@
+[
+  {
+    "atleta_id": "a1b2c3d4-0000-4000-8000-000000000001",
+    "unidade": "PKZ",
+    "nome": "Atleta Exemplo 1",
+    "idade": 14,
+    "categoria": "Sub-15",
+    "ativo": true,
+    "total_avaliacoes": 3,
+    "ultima_avaliacao_em": "2026-08-20"
+  },
+  {
+    "atleta_id": "a1b2c3d4-0000-4000-8000-000000000002",
+    "unidade": "PKZ",
+    "nome": "Atleta Exemplo 2",
+    "idade": 11,
+    "categoria": null,
+    "ativo": true,
+    "total_avaliacoes": 1,
+    "ultima_avaliacao_em": "2026-09-05"
+  }
+]

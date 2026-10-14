@@ -151,8 +151,8 @@ Leia o diff de verdade (`git diff -- <escopo>`), não só os nomes dos arquivos.
   estar no `env.example` (com valor de exemplo) e documentada no README. Se faltar, avise.
 - **Coerência com o README** — se a estrutura de arquivos mudou (arquivo movido, criado ou renomeado), o
   README ainda descreve o que existe? Avise se não.
-- **Formato de JSON** — `comparacao.json` e `evolucao.json` são provisórios; se o formato mudar, mencione
-  no PR.
+- **Formato de JSON** — os arquivos em `exemplos/api/` são o contrato de exemplo da API (`docs/api.md`);
+  se o formato mudar, mencione no PR e confira se `docs/api.md` foi atualizado junto.
 
 Nenhum desses itens é validado por execução: você **não roda** SQL nem conecta no banco. Diga isso no PR.
 

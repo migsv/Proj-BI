@@ -1,10 +1,16 @@
 # Projeto BI / SQL
 
+Repositório do **Grupo de Desenvolvimento** do Projeto BI (PKZ / One to One): tratamento das medidas das avaliações, API de dados e geração e envio dos relatórios. O banco novo é carregado pelo grupo de Banco de Dados; este grupo só lê esse banco.
+
 Este projeto cria os schemas iniciais e configura uma conexão FDW para um banco remoto.
 
 ## Estrutura
 - `01_schemas.sql`: cria os schemas `origem`, `trat` e `api`
-- `02_fdw.sql`: configura o PostgreSQL Foreign Data Wrapper para acessar o banco remoto
+- `02_fdw.sql`: configura o PostgreSQL Foreign Data Wrapper para acessar o banco remoto. O script importa o schema `public`; o banco novo do grupo de Banco de Dados usa o schema `novo`, então confira antes de rodar
+- `03_storage.sql`: cria o bucket privado `relatorios` para os PDFs
+- `04_trat_parametros_catalogo.sql`: parâmetros de negócio (`trat.parametro`) e catálogo de regras por teste (`trat.catalogo_teste`)
+- `docs/api.md`: contrato das views do schema `api` (colunas, regras e como chamar)
+- `exemplos/api/`: respostas de exemplo da API, no formato que o Supabase devolve, para o gerador de relatórios começar sem esperar a API
 - `.env`: arquivo local com as variáveis de ambiente
 
 ## Arquivo .env
@@ -37,6 +43,8 @@ psql "$SUPABASE_DB_URL" \
   -v REMOTO_USER="$REMOTO_USER" \
   -v REMOTO_PASSWORD="$REMOTO_PASSWORD" \
   -f 02_fdw.sql
+psql "$SUPABASE_DB_URL" -f 03_storage.sql
+psql "$SUPABASE_DB_URL" -f 04_trat_parametros_catalogo.sql
 ```
 
 ---
@@ -60,6 +68,8 @@ psql "$env:SUPABASE_DB_URL" `
   -v REMOTO_USER="$env:REMOTO_USER" `
   -v REMOTO_PASSWORD="$env:REMOTO_PASSWORD" `
   -f .\02_fdw.sql
+psql "$env:SUPABASE_DB_URL" -f .\03_storage.sql
+psql "$env:SUPABASE_DB_URL" -f .\04_trat_parametros_catalogo.sql
 ```
 
 Ou, se quiser carregar o `.env` em uma sessão do PowerShell:
@@ -77,8 +87,14 @@ Get-Content .env | ForEach-Object {
 - Nunca no GitHub, no front ou em chat. Se vazar: *Project Settings → API Keys*, gere outra e apague a antiga.
 - O front usa apenas a publishable key.
 
+## API
+- A API é a REST automática do Supabase: cada view do schema `api` vira um endpoint. Colunas, regras e exemplos estão em [`docs/api.md`](docs/api.md).
+- Para o schema `api` aparecer na API, ele precisa estar em *Project Settings → Data API → Exposed schemas* no painel. O `GRANT` do `01_schemas.sql` sozinho não basta.
+- Quem chama envia o cabeçalho `Accept-Profile: api`; sem ele o Supabase procura a view em `public`.
+- Só usuário logado (`authenticated`) recebe resposta. O papel `anon` não tem acesso ao schema.
+
 ## Storage
-- Bucket `relatorios` é privado (criado por `sql/03_storage.sql`).
+- Bucket `relatorios` é privado (criado por `03_storage.sql`).
 - Usuários acessam os PDFs por URL assinada, gerada pelo backend.
 
 ## Claude + Supabase (MCP)

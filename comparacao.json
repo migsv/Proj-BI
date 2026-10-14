@@ -1,7 +1,0 @@
-{
-  "_aviso": "Formato PROVISÓRIO. Definir os campos reais.",
-  "itens": [
-    { "nome": "Item A", "valor": 10 },
-    { "nome": "Item B", "valor": 20 }
-  ]
-}
